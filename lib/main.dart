@@ -1,16 +1,16 @@
-import 'package:backendfirebaseandothers/manydata.dart';
-import 'package:backendfirebaseandothers/popupmy.dart';
-import 'package:backendfirebaseandothers/sharedreferdart.dart';
-import 'package:backendfirebaseandothers/sqlllite.dart';
+
+import 'package:backendfirebaseandothers/textwatcher.dart';
+import 'package:backendfirebaseandothers/uploaddata.dart';
+import 'package:backendfirebaseandothers/withcustomdialouge.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core_web/firebase_core_web.dart';
+
 
 void main() async{
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
 
-  runApp(MyApp());
+  runApp(textwatcher());
 }
 
 class MyApp extends StatelessWidget {
