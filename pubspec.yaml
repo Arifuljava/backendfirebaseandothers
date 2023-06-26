@@ -38,6 +38,8 @@ dependencies:
   sqflite:
   path:
   cloud_firestore:
+  flutter_barcode_scanner:
+  http:
 
 
 

@@ -1,4 +1,13 @@
 
+import 'package:backendfirebaseandothers/backend.dart';
+import 'package:backendfirebaseandothers/barcodegen.dart';
+import 'package:backendfirebaseandothers/categorywithcustom.dart';
+import 'package:backendfirebaseandothers/firstgetimage.dart';
+import 'package:backendfirebaseandothers/listtt.dart';
+import 'package:backendfirebaseandothers/onebyone.dart';
+import 'package:backendfirebaseandothers/queryfirst.dart';
+import 'package:backendfirebaseandothers/querywithparams.dart';
+import 'package:backendfirebaseandothers/showcategories.dart';
 import 'package:backendfirebaseandothers/textwatcher.dart';
 import 'package:backendfirebaseandothers/uploaddata.dart';
 import 'package:backendfirebaseandothers/withcustomdialouge.dart';
@@ -7,10 +16,10 @@ import 'package:firebase_core/firebase_core.dart';
 
 
 void main() async{
-WidgetsFlutterBinding.ensureInitialized();
-await Firebase.initializeApp();
+//releaseWidgetsFlutterBinding.ensureInitialized();
+//await Firebase.initializeApp();
 
-  runApp(textwatcher());
+  runApp(showcategories());
 }
 
 class MyApp extends StatelessWidget {
