@@ -25,7 +25,7 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  final url = 'http://localhost:5000/tht/categories';
+  final url = 'http://localhost:5000/tht/allIcons';
   final TextEditingController _textFieldController = TextEditingController();
   List<String> categories1 = [];
   List<dynamic>? myList;
@@ -37,7 +37,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   Future<void> fetchCategories() async {
-    final url = 'http://localhost:5000/tht/categories';
+    final url = 'http://localhost:5000/tht/allIcons';
 
     try {
       final response = await http.get(Uri.parse(url));
