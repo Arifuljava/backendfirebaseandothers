@@ -27,7 +27,7 @@ void main() async{
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
   
-  runApp(retrivingdata2());
+  runApp(retrivingdata2(data: 'iiio',));
 }
 
 class MyApp extends StatelessWidget {

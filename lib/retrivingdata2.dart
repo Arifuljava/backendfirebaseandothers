@@ -1,48 +1,135 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
+import 'package:http/http.dart' as http;
 
 class retrivingdata2 extends StatefulWidget {
-  const retrivingdata2({Key? key}) : super(key: key);
+  final String data;
+  const retrivingdata2({Key? key,required this.data}) : super(key: key);
 
   @override
   _MyFirebaseAppState createState() => _MyFirebaseAppState();
 }
-
+late   String detector = "";
 class _MyFirebaseAppState extends State<retrivingdata2> {
+  // final url = 'http://localhost:5000/tht/allIcons';
+  final url = 'https://grozziie.zjweiting.com:8033/tht/allIcons';
+  List<String> emails = [];
+  List<String> imageUrls = []; // List to store the image URLs
+
+
+
+
+
+
+  Future<void> fetchEmails() async {
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final categories = jsonResponse as List<dynamic>;
+
+        print('Number of emails: ${categories.length}');
+
+        setState(() {
+          // Extract email addresses and image URLs and add them to the respective lists
+          emails = categories.map((category) => category['categoryName'] as String).toList();
+          imageUrls = categories
+              .map((category) => category['icon'] as String?)
+              .where((icon) => icon != null)
+              .map((icon) => 'https://grozziie.zjweiting.com:8033/tht/images/$icon')
+              .toList();
+        });
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
+    fetchEmails();
     initializeFirebase();
-    retrieveDataFromFirestore();
+    detector = widget.data.toString();
+
+
+    print(detector);
+
+
   }
+
+
 
   Future<void> initializeFirebase() async {
     await Firebase.initializeApp();
   }
 
-  Future<void> retrieveDataFromFirestore() async {
-    final firestoreInstance = FirebaseFirestore.instance;
-    final collectionRef = firestoreInstance.collection('MyTesting');
 
-    try {
-      final QuerySnapshot querySnapshot = await collectionRef.get();
-
-      final List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-
-      for (final document in documents) {
-        final data = document.data();
-        // Process the data as per your requirement
-        print('Document ID: ${document.id}');
-        print('Data: $data');
-      }
-    } catch (error) {
-      print('Error retrieving data from Firestore: $error');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    final elementsMatchingCondition = <Widget>[];
+    final remainingElements = <Widget>[];
+
+    for (int i = 0; i < emails.length; i++) {
+      final element = Container(
+        margin: const EdgeInsets.all(10),
+        child: GestureDetector(
+          onTap: () {
+            // Handle the tap/click event here
+            // You can navigate to a new screen, show a dialog, or perform any desired action
+            print('Image tapped! Index: $i');
+          },
+          child: Column(
+            children: [
+              Image.network(
+                imageUrls[i],
+                width: 48,
+                height: 48,
+              ),
+              const SizedBox(height: 10),
+              Text(emails[i]),
+            ],
+          ),
+        ),
+      );
+
+      if (emails[i] == detector) {
+
+        String dataget = imageUrls[i];
+
+
+        FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
+        bool isDataFound = await checkDocumentExists(dataget);
+        if (isDataFound) {
+          print('Document with email "ariful@gmail.com" exists.');
+
+
+
+        } else {
+          print('Document with email "ariful@gmail.com" does not exist.');
+          addData(dataget);
+          print("Data Added");
+          //elementsMatchingCondition.add(element);
+
+        }
+
+        print(imageUrls[i]);
+      } else {
+        // remainingElements.add(element);
+      }
+    }
+
     return MaterialApp(
       title: 'Firestore ListView',
       theme: ThemeData(
@@ -51,6 +138,26 @@ class _MyFirebaseAppState extends State<retrivingdata2> {
       home: FirestoreListView(),
     );
   }
+}
+Future<void> addData(String dataaddtobe) async{
+  try{
+    FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
+    firebaseFirestore.collection(detector)
+        .add({
+      "data": ""+dataaddtobe
+    });
+
+
+  }catch(e)
+  {
+    print("Error : "+e.toString());
+  }
+}
+Future<bool> checkDocumentExists(String email) async {
+  final collectionRef = FirebaseFirestore.instance.collection(detector);
+  final querySnapshot = await collectionRef.where('data', isEqualTo: email).get();
+
+  return querySnapshot.size > 0;
 }
 
 class FirestoreListView extends StatefulWidget {
