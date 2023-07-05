@@ -4,21 +4,34 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class contitionimage extends StatefulWidget {
-  const contitionimage({Key? key}) : super(key: key);
+  final String data;
+  const contitionimage({Key? key, required this.data}) : super(key: key);
+
 
   @override
   State<contitionimage> createState() => _EmailShowingState();
 }
 
 class _EmailShowingState extends State<contitionimage> {
-  final url = 'http://localhost:5000/tht/allIcons';
+ // final url = 'http://localhost:5000/tht/allIcons';
+  final url = 'https://grozziie.zjweiting.com:8033/tht/allIcons';
   List<String> emails = [];
   List<String> imageUrls = []; // List to store the image URLs
+
+
+
+late   String detector = "";
+
 
   @override
   void initState() {
     super.initState();
     fetchEmails();
+    detector = widget.data.toString();
+
+
+    print(detector);
+
   }
 
   Future<void> fetchEmails() async {
@@ -37,7 +50,7 @@ class _EmailShowingState extends State<contitionimage> {
           imageUrls = categories
               .map((category) => category['icon'] as String?)
               .where((icon) => icon != null)
-              .map((icon) => 'http://localhost:5000/tht/images/$icon')
+              .map((icon) => 'https://grozziie.zjweiting.com:8033/tht/images/$icon')
               .toList();
         });
       } else {
@@ -77,7 +90,7 @@ class _EmailShowingState extends State<contitionimage> {
         ),
       );
 
-      if (emails[i] == "Border") {
+      if (emails[i] == detector) {
         elementsMatchingCondition.add(element);
       } else {
        // remainingElements.add(element);
@@ -87,7 +100,7 @@ class _EmailShowingState extends State<contitionimage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Emails'),
+          title:  Text(""+detector),
         ),
         body: GridView.count(
           crossAxisCount: 4,

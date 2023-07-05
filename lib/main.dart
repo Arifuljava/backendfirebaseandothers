@@ -9,6 +9,7 @@ import 'package:backendfirebaseandothers/fetchdata.dart';
 import 'package:backendfirebaseandothers/firstgetimage.dart';
 import 'package:backendfirebaseandothers/imageload.dart';
 import 'package:backendfirebaseandothers/imagestore.dart';
+import 'package:backendfirebaseandothers/listcategory.dart';
 import 'package:backendfirebaseandothers/listtt.dart';
 import 'package:backendfirebaseandothers/onebyone.dart';
 import 'package:backendfirebaseandothers/queryfirst.dart';
@@ -27,7 +28,7 @@ void main() async{
 //releaseWidgetsFlutterBinding.ensureInitialized();
 //await Firebase.initializeApp();
   
-  runApp(contitionimage());
+  runApp(listcategory());
 }
 
 class MyApp extends StatelessWidget {
