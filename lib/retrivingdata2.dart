@@ -1,20 +1,15 @@
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class retrivingdata extends StatefulWidget {
-  const retrivingdata({Key? key}) : super(key: key);
+class retrivingdata2 extends StatefulWidget {
+  const retrivingdata2({Key? key}) : super(key: key);
 
   @override
   _MyFirebaseAppState createState() => _MyFirebaseAppState();
 }
 
-class _MyFirebaseAppState extends State<retrivingdata> {
+class _MyFirebaseAppState extends State<retrivingdata2> {
   @override
   void initState() {
     super.initState();
@@ -45,6 +40,7 @@ class _MyFirebaseAppState extends State<retrivingdata> {
       print('Error retrieving data from Firestore: $error');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -101,13 +97,17 @@ class _FirestoreListViewState extends State<FirestoreListView> {
       appBar: AppBar(
         title: Text('Firestore ListView'),
       ),
-      body: ListView.builder(
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Adjust the cross axis count as per your requirement
+        ),
         itemCount: dataList.length,
         itemBuilder: (BuildContext context, int index) {
           Map<String, dynamic> item = dataList[index];
-          return ListTile(
-            title: Text(item['data']),
-            subtitle: Text(item['data']),
+          return Image.network(
+            item['data'],
+            width: 30,
+            height: 30,
           );
         },
       ),

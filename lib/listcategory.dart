@@ -1,6 +1,8 @@
 import 'package:backendfirebaseandothers/contitionimage.dart';
 import 'package:flutter/material.dart';
 
+import 'conti2.dart';
+
 
 class listcategory extends StatefulWidget {
   const listcategory({Key? key}) : super(key: key);
@@ -34,7 +36,7 @@ class _ListCategoryState extends State<listcategory> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => contitionimage(data: emails[index]),
+                    builder: (context) => conti2(data: emails[index]),
                   ),
                 );
               },
