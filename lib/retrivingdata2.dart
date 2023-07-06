@@ -109,20 +109,23 @@ class _MyFirebaseAppState extends State<retrivingdata2> {
         String dataget = imageUrls[i];
 
 
-        FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
-        bool isDataFound = await checkDocumentExists(dataget);
-        if (isDataFound) {
-          print('Document with email "ariful@gmail.com" exists.');
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+        bool isDataFound = false;
 
+        checkDocumentExists(dataget).then((value) {
+          isDataFound = value;
+          if (isDataFound) {
+            print('Document with email "ariful@gmail.com" exists.');
 
-
-        } else {
-          print('Document with email "ariful@gmail.com" does not exist.');
-          addData(dataget);
-          print("Data Added");
-          //elementsMatchingCondition.add(element);
-
-        }
+          } else {
+            print('Document with email "ariful@gmail.com" does not exist.');
+            addData(dataget);
+            print("Data Added");
+            // elementsMatchingCondition.add(element);
+          }
+        }).catchError((error) {
+          print('An error occurred: $error');
+        });
 
         print(imageUrls[i]);
       } else {
@@ -186,7 +189,7 @@ class _FirestoreListViewState extends State<FirestoreListView> {
     List<Map<String, dynamic>> dataList = [];
 
     try {
-      QuerySnapshot snapshot = await _firestore.collection('Animals').get();
+      QuerySnapshot snapshot = await _firestore.collection(detector).get();
 
       snapshot.docs.forEach((DocumentSnapshot doc) {
         dataList.add(doc.data() as Map<String, dynamic>);

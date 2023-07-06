@@ -9,6 +9,7 @@ import 'package:backendfirebaseandothers/fetchdata.dart';
 import 'package:backendfirebaseandothers/firstgetimage.dart';
 import 'package:backendfirebaseandothers/imageload.dart';
 import 'package:backendfirebaseandothers/listcategory.dart';
+import 'package:backendfirebaseandothers/listcategory2.dart';
 import 'package:backendfirebaseandothers/listtt.dart';
 import 'package:backendfirebaseandothers/onebyone.dart';
 import 'package:backendfirebaseandothers/queryfirst.dart';
@@ -27,7 +28,7 @@ void main() async{
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
   
-  runApp(retrivingdata2(data: 'iiio',));
+  runApp(listcategory2());
 }
 
 class MyApp extends StatelessWidget {
