@@ -10,22 +10,18 @@ import 'package:http/http.dart' as http;
 
 class retrivingdata2 extends StatefulWidget {
   final String data;
-  const retrivingdata2({Key? key,required this.data}) : super(key: key);
+  const retrivingdata2({Key? key, required this.data}) : super(key: key);
 
   @override
   _MyFirebaseAppState createState() => _MyFirebaseAppState();
 }
-late   String detector = "";
+
+late String detector = "";
+
 class _MyFirebaseAppState extends State<retrivingdata2> {
-  // final url = 'http://localhost:5000/tht/allIcons';
   final url = 'https://grozziie.zjweiting.com:8033/tht/allIcons';
   List<String> emails = [];
   List<String> imageUrls = []; // List to store the image URLs
-
-
-
-
-
 
   Future<void> fetchEmails() async {
     try {
@@ -39,11 +35,14 @@ class _MyFirebaseAppState extends State<retrivingdata2> {
 
         setState(() {
           // Extract email addresses and image URLs and add them to the respective lists
-          emails = categories.map((category) => category['categoryName'] as String).toList();
+          emails = categories
+              .map((category) => category['categoryName'] as String)
+              .toList();
           imageUrls = categories
               .map((category) => category['icon'] as String?)
               .where((icon) => icon != null)
-              .map((icon) => 'https://grozziie.zjweiting.com:8033/tht/images/$icon')
+              .map((icon) =>
+          'https://grozziie.zjweiting.com:8033/tht/images/$icon')
               .toList();
         });
       } else {
@@ -54,7 +53,6 @@ class _MyFirebaseAppState extends State<retrivingdata2> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -62,19 +60,12 @@ class _MyFirebaseAppState extends State<retrivingdata2> {
     initializeFirebase();
     detector = widget.data.toString();
 
-
     print(detector);
-
-
   }
-
-
 
   Future<void> initializeFirebase() async {
     await Firebase.initializeApp();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -105,23 +96,20 @@ class _MyFirebaseAppState extends State<retrivingdata2> {
       );
 
       if (emails[i] == detector) {
-
         String dataget = imageUrls[i];
 
-
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+        FirebaseFirestore firebaseFirestore =
+            FirebaseFirestore.instance;
         bool isDataFound = false;
 
         checkDocumentExists(dataget).then((value) {
           isDataFound = value;
           if (isDataFound) {
             print('Document with email "ariful@gmail.com" exists.');
-
           } else {
             print('Document with email "ariful@gmail.com" does not exist.');
             addData(dataget);
             print("Data Added");
-            // elementsMatchingCondition.add(element);
           }
         }).catchError((error) {
           print('An error occurred: $error');
@@ -142,33 +130,31 @@ class _MyFirebaseAppState extends State<retrivingdata2> {
     );
   }
 }
-Future<void> addData(String dataaddtobe) async{
-  try{
-    FirebaseFirestore firebaseFirestore=FirebaseFirestore.instance;
-    firebaseFirestore.collection(detector)
-        .add({
-      "data": ""+dataaddtobe
+
+Future<void> addData(String dataaddtobe) async {
+  try {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    firebaseFirestore.collection(detector).add({
+      "data": "" + dataaddtobe,
     });
-
-
-  }catch(e)
-  {
-    print("Error : "+e.toString());
+  } catch (e) {
+    print("Error : " + e.toString());
   }
 }
+
 Future<bool> checkDocumentExists(String email) async {
   final collectionRef = FirebaseFirestore.instance.collection(detector);
-  final querySnapshot = await collectionRef.where('data', isEqualTo: email).get();
-
+  final querySnapshot =
+  await collectionRef.where('data', isEqualTo: email).get();
   return querySnapshot.size > 0;
 }
 
 class FirestoreListView extends StatefulWidget {
   @override
-  _FirestoreListViewState createState() => _FirestoreListViewState();
+  FirestoreListViewState createState() => FirestoreListViewState();
 }
 
-class _FirestoreListViewState extends State<FirestoreListView> {
+class FirestoreListViewState extends State<FirestoreListView> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Map<String, dynamic>> dataList = [];
 
@@ -203,24 +189,32 @@ class _FirestoreListViewState extends State<FirestoreListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Firestore ListView'),
-      ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Adjust the cross axis count as per your requirement
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Firestore ListView'),
         ),
-        itemCount: dataList.length,
-        itemBuilder: (BuildContext context, int index) {
-          Map<String, dynamic> item = dataList[index];
-          return Image.network(
-            item['data'],
-            width: 30,
-            height: 30,
-          );
-        },
+        body: Expanded(
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // Adjust the cross axis count as per your requirement
+            ),
+            itemCount: dataList.length,
+            itemBuilder: (BuildContext context, int index) {
+              Map<String, dynamic> item = dataList[index];
+              return Image.network(
+                item['data'],
+                width: 30,
+                height: 30,
+              );
+            },
+          ),
+        ),
       ),
     );
   }
+}
+
+void main() {
+  runApp(retrivingdata2(data: 'Border'));
 }

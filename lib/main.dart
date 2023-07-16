@@ -10,7 +10,10 @@ import 'package:backendfirebaseandothers/firstgetimage.dart';
 import 'package:backendfirebaseandothers/imageload.dart';
 import 'package:backendfirebaseandothers/listcategory.dart';
 import 'package:backendfirebaseandothers/listcategory2.dart';
+import 'package:backendfirebaseandothers/listcategory222.dart';
 import 'package:backendfirebaseandothers/listtt.dart';
+import 'package:backendfirebaseandothers/mylisttt.dart';
+import 'package:backendfirebaseandothers/mytest.dart';
 import 'package:backendfirebaseandothers/onebyone.dart';
 import 'package:backendfirebaseandothers/queryfirst.dart';
 import 'package:backendfirebaseandothers/querywithparams.dart';
@@ -28,7 +31,7 @@ void main() async{
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
   
-  runApp(listcategory2());
+  runApp(mylisttt());
 }
 
 class MyApp extends StatelessWidget {
