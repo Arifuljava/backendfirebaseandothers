@@ -27,13 +27,28 @@ class _saveinfoState extends State<saveinfo> {
   ConnectivityResult _connectivityResult = ConnectivityResult.none;
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
+     checkInternetConnection();
+     print(_isConnected);
 
     // Subscribe to connectivity changes
 
   }
+  bool _isConnected = false;
 
+  Future<void> checkInternetConnection() async {
+    try {
+      final response = await http.head('https://www.google.com' as Uri);
+      setState(() {
+        _isConnected = response.statusCode == 200;
+      });
+    } catch (e) {
+      setState(() {
+        _isConnected = false;
+      });
+    }
+  }
   Future<void> checkConnectivity() async {
     final ConnectivityResult connectivityResult =
     await Connectivity().checkConnectivity();
@@ -77,7 +92,7 @@ class _saveinfoState extends State<saveinfo> {
                 child: Text('Insert Name'),
               ),
               FutureBuilder<List<String>>(
-                future: dbHelper.getNames("johns_table1"),
+                future: dbHelper.getNames("Animals"),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
