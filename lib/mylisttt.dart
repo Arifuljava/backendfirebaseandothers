@@ -172,6 +172,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class mylisttt extends StatefulWidget {
   const mylisttt({Key? key});
@@ -486,6 +493,24 @@ class _FirestoreListViewState extends State<FirestoreListView2> {
 
     return dataList;
   }
+  Future<String> downloadAndSaveImage(String imageUrl) async {
+    final response = await http.get(Uri.parse(imageUrl));
+
+    if (response.statusCode == 200) {
+      final appDir = await getApplicationDocumentsDirectory();
+      final fileName = imageUrl
+          .split('/')
+          .last;
+      final filePath = '${appDir.path}/$fileName';
+
+      final File imageFile = File(filePath);
+      await imageFile.writeAsBytes(response.bodyBytes);
+
+      return filePath;
+    } else {
+      throw Exception('Failed to download image');
+    }
+  }
 int face=0; 
   @override
   Widget build(BuildContext context) {
@@ -499,6 +524,7 @@ int face=0;
         String dataget = imageUrls[i];
         bool isDataFound = false;
 
+        /*
         checkDocumentExists(dataget).then((value) {
           isDataFound = value;
           if (isDataFound) {
@@ -506,7 +532,8 @@ int face=0;
 
           } else {
             print('Document with email "ariful@gmail.com" does not exist.');
-           // addData(dataget);
+              addData(dataget);
+
            // dbHelper.insertName(dataget);
             print("Data Added");
             // elementsMatchingCondition.add(element);
@@ -515,7 +542,11 @@ int face=0;
           print('An error occurred: $error');
         });
 
+         */
+        checkvalue(mydetctor,dataget);
 
+
+       /*
         checkNameExistence(mydetctor,dataget);
         if(_nameExists)
           {
@@ -525,8 +556,12 @@ int face=0;
           {
             print("Not");
             String tableName = ''+mydetctor; // Use a meaningful name here
-             dbHelper.insertName(tableName, ''+dataget);
+
+            final imageUrl = ''+dataget;  // Your image URL
+            final imagePath =  downloadAndSaveImage(imageUrl);
+            dbHelper.insertName(tableName, ''+imagePath.toString());
           }
+        */
 
 
       } else {
@@ -581,6 +616,27 @@ int face=0;
         ),
       ),
     );
+  }
+
+  void checkvalue(String tablename1, String dataname1)  async{
+    final imageUrl = ''+dataname1;  // Your image URL
+    final imagePath =  await downloadAndSaveImage(imageUrl);
+   await checkNameExistence(tablename1,imagePath);
+    if(_nameExists)
+    {
+      print("Get");
+    }
+    else
+    {
+      print("Not");
+      String tableName = ''+tablename1; // Use a meaningful name here
+
+
+      dbHelper.insertName(tableName, ''+imagePath.toString());
+      print(imagePath.toString());
+    }
+
+
   }
 }
 class ListItem{

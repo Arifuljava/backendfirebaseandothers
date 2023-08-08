@@ -13,11 +13,11 @@ class saveinfo extends StatefulWidget {
   @override
   State<saveinfo> createState() => _saveinfoState();
 }
-
+List<String> nameList = [];
 class _saveinfoState extends State<saveinfo> {
   final dbHelper = DatabaseHelper();
   bool _nameExists = false; // State variable to store the result of the check
-
+  List<String> my_list=[];
   Future<void> checkNameExistence(String name) async {
     bool exists = await dbHelper.isNameExists("johns_table1",name);
     setState(() {
@@ -25,7 +25,12 @@ class _saveinfoState extends State<saveinfo> {
     });
   }
   ConnectivityResult _connectivityResult = ConnectivityResult.none;
+  void fetchAndPrintNames(String databasename) async {
+    List<String> names = await dbHelper.getNames(databasename);
 
+    // Now 'names' contains all the names from the specified table
+    print(names);
+  }
   @override
   void initState()  {
     super.initState();
@@ -74,6 +79,7 @@ class _saveinfoState extends State<saveinfo> {
                  // dbHelper.insertName('Ariful Islam');
                  // checkNameExistence('John Doe');
                 //  print(_nameExists ? 'Name exists in the database' : 'Name does not exist');
+                   fetchAndPrintNames("Animals");
 
                   checkNameExistence('John Doe');
                   if(_nameExists)
@@ -92,7 +98,7 @@ class _saveinfoState extends State<saveinfo> {
                 child: Text('Insert Name'),
               ),
               FutureBuilder<List<String>>(
-                future: dbHelper.getNames("Border"),
+                future: dbHelper.getNames("Animals"),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
@@ -105,7 +111,6 @@ class _saveinfoState extends State<saveinfo> {
                       children: [
                         Text('Stored Names:'),
                         for (var name in snapshot.data!)
-
                           Text(name)
 
                         ,
