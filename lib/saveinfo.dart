@@ -92,7 +92,7 @@ class _saveinfoState extends State<saveinfo> {
                 child: Text('Insert Name'),
               ),
               FutureBuilder<List<String>>(
-                future: dbHelper.getNames("Animals"),
+                future: dbHelper.getNames("Border"),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();

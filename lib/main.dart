@@ -32,7 +32,7 @@ void main() async{
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
   
-  runApp(mylisttt());
+  runApp(saveinfo());
 }
 
 class MyApp extends StatelessWidget {

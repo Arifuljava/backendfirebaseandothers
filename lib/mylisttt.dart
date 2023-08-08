@@ -515,7 +515,7 @@ int face=0;
           print('An error occurred: $error');
         });
 
-      /*
+
         checkNameExistence(mydetctor,dataget);
         if(_nameExists)
           {
@@ -527,7 +527,7 @@ int face=0;
             String tableName = ''+mydetctor; // Use a meaningful name here
              dbHelper.insertName(tableName, ''+dataget);
           }
-       */
+
 
       } else {
         // remainingElements.add(element);
@@ -625,6 +625,71 @@ class DatabaseHelper {
   Future<void> createNameTable(String tableName) async {
     final db = await database;
     await db.execute(
+      'CREATE TABLE IF NOT EXISTS $tableName(name TEXT PRIMARY KEY)',
+    );
+  }
+
+  Future<void> insertName(String tableName, String name) async {
+    await createNameTable(tableName);
+
+    final db = await database;
+    await db.insert(
+      tableName,
+      {'name': name},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    print("Added");
+  }
+
+  Future<List<String>> getNames(String tableName) async {
+    await createNameTable(tableName);
+
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    return List.generate(maps.length, (i) {
+      return maps[i]['name'];
+    });
+  }
+
+  Future<bool> isNameExists(String tableName, String name) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableName,
+      where: 'name = ?',
+      whereArgs: [name],
+    );
+    return maps.isNotEmpty;
+  }
+}
+/*
+class DatabaseHelper {
+  static final DatabaseHelper _instance = DatabaseHelper.internal();
+
+  factory DatabaseHelper() => _instance;
+
+  Database? _db;
+
+  DatabaseHelper.internal();
+
+  Future<Database> get database async {
+    if (_db != null) return _db!;
+
+    _db = await initDatabase();
+    return _db!;
+  }
+
+  Future<Database> initDatabase() async {
+    String path = join(await getDatabasesPath(), 'my_database.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (Database db, int version) async {},
+    );
+  }
+
+  Future<void> createNameTable(String tableName) async {
+    final db = await database;
+    await db.execute(
       'CREATE TABLE IF NOT EXISTS $tableName(id INTEGER PRIMARY KEY, name TEXT)',
     );
   }
@@ -661,6 +726,7 @@ class DatabaseHelper {
     return maps.isNotEmpty;
   }
 }
+ */
 
 
 /*
