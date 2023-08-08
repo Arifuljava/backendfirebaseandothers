@@ -36,6 +36,9 @@ dependencies:
   firebase_analytics:
   shared_preferences:
   path:
+  image:
+  connectivity:
+  sqflite:
   cloud_firestore:
   flutter_barcode_scanner:
   http:

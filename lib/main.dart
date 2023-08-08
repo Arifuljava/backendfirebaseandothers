@@ -19,6 +19,7 @@ import 'package:backendfirebaseandothers/queryfirst.dart';
 import 'package:backendfirebaseandothers/querywithparams.dart';
 import 'package:backendfirebaseandothers/retrivingdata.dart';
 import 'package:backendfirebaseandothers/retrivingdata2.dart';
+import 'package:backendfirebaseandothers/saveinfo.dart';
 import 'package:backendfirebaseandothers/showcategories.dart';
 import 'package:backendfirebaseandothers/textwatcher.dart';
 import 'package:backendfirebaseandothers/uploaddata.dart';
@@ -31,7 +32,7 @@ void main() async{
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
   
-  runApp(mylisttt());
+  runApp(saveinfo());
 }
 
 class MyApp extends StatelessWidget {
